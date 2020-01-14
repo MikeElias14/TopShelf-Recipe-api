@@ -1,4 +1,4 @@
-from .recipes_models import Glassware, Ingredients
+
 
 # Default glasses
 default_glassware = [

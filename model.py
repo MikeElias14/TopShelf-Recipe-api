@@ -1,15 +1,27 @@
-from app import app
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
+from config import SQLALCHEMY_RECIPE_DATABASE_URI
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_RECIPE_DATABASE_URI
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
 
 
-class Recipes(app.db.Model):
+class Recipes(db.Model):
     __tablename__ = 'recipes'
-    db = app.db
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    created_at = db.Column(db.Datetime, nullable=False)
-    updated_at = db.Column(db.Datetime)
+    created_at = db.Column(db.DateTime, nullable=False)
+    updated_at = db.Column(db.DateTime)
     name = db.Column(db.String(128), nullable=False)
-    is_default = db.Column(db.Boolean, nullables=False)
+    is_default = db.Column(db.Boolean, nullable=False)
     desc = db.Column(db.Text)
     instructions = db.Column(db.Text)
     image = db.Column(db.String(128))
@@ -17,45 +29,43 @@ class Recipes(app.db.Model):
     created_by_user_id = db.Column(db.BigInteger)
 
 
-class Glassware(app.db.Model):
+class Glassware(db.Model):
     __tablename__ = 'glassware'
-    db = app.db
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     name = db.Column(db.String(128), nullable=False)
     image = db.Column(db.String(128))
 
 
-class Ingredients(app.db.Model):
+class Ingredients(db.Model):
     __tablename__ = 'ingredients'
-    db = app.db
-
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     name = db.Column(db.String(128), nullable=False)
     image = db.Column(db.String(128))
 
 
-class RecipeIngredient(app.db.Model):
+class RecipeIngredient(db.Model):
     __tablename__ = 'recipe_ingredients'
-    db = app.db
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    recipes_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
-    ingredients_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), nullable=False)
+    recipes_id = db.Column(db.BigInteger, db.ForeignKey('recipes.id'), nullable=False)
+    ingredients_id = db.Column(db.BigInteger, db.ForeignKey('ingredients.id'), nullable=False)
 
 
-class Tags(app.db.Model):
+class Tags(db.Model):
     __tablename__ = 'tags'
-    db = app.db
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     tag = db.Column(db.String(128), nullable=False)
 
 
-class RecipesTags(app.db.Model):
+class RecipesTags(db.Model):
     __tablename__ = 'recipe_tags'
-    db = app.db
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     recipes_id = db.Column(db.BigInteger, db.ForeignKey('recipes.id'), nullable=False)
     tags_id = db.Column(db.BigInteger, db.ForeignKey('tags.id'), nullable=False)
+
+
+if __name__ == '__main__':
+    manager.run()
