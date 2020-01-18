@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from config import SQLALCHEMY_RECIPE_DATABASE_URI
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_RECIPE_DATABASE_URI
 
@@ -38,6 +39,7 @@ class Glassware(db.Model):
 
 class Ingredients(db.Model):
     __tablename__ = 'ingredients'
+
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     name = db.Column(db.String(128), nullable=False, unique=True)
     image = db.Column(db.String(128))
@@ -63,6 +65,14 @@ class RecipesTags(db.Model):
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     recipes_id = db.Column(db.BigInteger, db.ForeignKey('recipes.id'), nullable=False)
+    tags_id = db.Column(db.BigInteger, db.ForeignKey('tags.id'), nullable=False)
+
+
+class IngredientsTags(db.Model):
+    __tablename__ = 'ingredient_tags'
+
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+    ingredients_id = db.Column(db.BigInteger, db.ForeignKey('ingredients.id'), nullable=False)
     tags_id = db.Column(db.BigInteger, db.ForeignKey('tags.id'), nullable=False)
 
 
