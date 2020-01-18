@@ -1,7 +1,6 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 import config
 
 
@@ -10,7 +9,7 @@ def create_app(test_config=None):
     _app = Flask(__name__, instance_relative_config=True)
     _app.config.from_mapping(
         SECRET_KEY='dev',
-        SQLALCHEMY_DATABASE_URI=config.SQLALCHEMY_USER_DATABASE_URI
+        SQLALCHEMY_DATABASE_URI=config.SQLALCHEMY_RECIPE_DATABASE_URI
     )
 
     if test_config is None:
@@ -26,13 +25,12 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # DB init
+    # Connect to DB
     _app.db = SQLAlchemy(_app)
-    _app.migrate = Migrate(_app, _app.db)
 
     # Create User Routes
-    from api.v1.user_api import user_bp
-    _app.register_blueprint(user_bp)
+    from api.v1.recipes_api import recipes_bp
+    _app.register_blueprint(recipes_bp)
 
     return _app
 
