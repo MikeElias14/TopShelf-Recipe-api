@@ -1,5 +1,5 @@
 import json
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 import controllers.controller as db
 
 ingredients_bp = Blueprint('ingredients', __name__, url_prefix='/ingredients')
@@ -20,9 +20,21 @@ ingredients_bp = Blueprint('ingredients', __name__, url_prefix='/ingredients')
 # def delete_ingredient():
 
 
-# Get One or More ingredients
+# Get One or More or All ingredients
 @ingredients_bp.route('', methods=["GET"])
 def get_ingredients():
-    ingredients = db.get_ingredients([1, 2, 3, 4])
+    ingredient_ids = request.args.get('ids')
+    page = int(request.args.get('page'))
+    per_page = int(request.args.get('per_page'))
 
-    return jsonify(ingredients), 200
+    if ingredient_ids is None and page is not None and per_page is not None:
+        result = db.get_ingredients_page(page, per_page)
+        code = 200
+    elif ingredient_ids is not None:
+        result = db.get_ingredients(ingredient_ids)
+        code = 200
+    else:
+        result = 'error'
+        code = 400
+
+    return jsonify(result), code

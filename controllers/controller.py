@@ -10,6 +10,7 @@ from models.model import (
 )
 
 
+# Template this?
 def ingredients_to_json(ingredients):
     result = []
 
@@ -29,6 +30,13 @@ def get_ingredients(ingredient_ids):
     query = Ingredients.query.filter(Ingredients.id.in_(ingredient_ids)).all()
 
     result = ingredients_to_json(query)
+    return result
+
+
+def get_ingredients_page(page, per_page):
+    query = Ingredients.query.order_by(Ingredients.id).paginate(int(page), int(per_page), error_out=False)
+
+    result = ingredients_to_json(query.items)
     return result
 
 
