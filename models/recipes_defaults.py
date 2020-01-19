@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import SQLALCHEMY_RECIPE_DATABASE_URI
 from models.model import Glassware, Ingredients, Tags
 
+# Start lightweight app for default import
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_RECIPE_DATABASE_URI
 

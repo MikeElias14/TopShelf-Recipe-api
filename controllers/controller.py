@@ -1,4 +1,4 @@
-from app import app
+import json
 from models.model import (
     RecipeIngredient,
     Recipes,
@@ -10,12 +10,26 @@ from models.model import (
 )
 
 
+def ingredients_to_json(ingredients):
+    result = []
+
+    for ingredient in ingredients:
+        info = dict(
+            id=ingredient.id,
+            image=ingredient.image,
+            name=ingredient.name
+        )
+        result.append(info)
+    return result
+
+
 def get_ingredients(ingredient_ids):
     if not isinstance(ingredient_ids, list):
         list(ingredient_ids)
     query = Ingredients.query.filter(Ingredients.id.in_(ingredient_ids)).all()
 
-    return query
+    result = ingredients_to_json(query)
+    return result
 
 
 def get_tags(tag_ids):

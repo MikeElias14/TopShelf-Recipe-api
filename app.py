@@ -3,6 +3,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import config
 
+# Define db then connect later
+db = SQLAlchemy()
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -26,15 +29,17 @@ def create_app(test_config=None):
         pass
 
     # Connect to DB
-    _app.db = SQLAlchemy(_app)
+    db.init_app(_app)
 
-    # Create User Routes
+    # Create Routes
     from api.v1.recipes_api import recipes_bp
     _app.register_blueprint(recipes_bp)
+
+    from api.v1.ingredients_api import ingredients_bp
+    _app.register_blueprint(ingredients_bp)
 
     return _app
 
 
-if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
+app = create_app()
+app.run(debug=True)
