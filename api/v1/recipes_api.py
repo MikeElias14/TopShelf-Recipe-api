@@ -1,5 +1,5 @@
 from flask import Blueprint
-from controllers.recipes_controller import
+import controllers.recipes_controller as db
 
 
 recipes_bp = Blueprint('recipes', __name__, url_prefix='/user')
@@ -18,4 +18,4 @@ def delete_recipe():
     
 # Get One or More Recipes
 @recipes_bp.route('/get', methods=["GET"])
-def get_recipe():
+def get_recipes():
