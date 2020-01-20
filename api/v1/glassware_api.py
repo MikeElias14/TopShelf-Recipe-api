@@ -23,9 +23,9 @@ glassware_bp = Blueprint('glassware', __name__, url_prefix='/glassware')
 # Get One or More or All glassware
 @glassware_bp.route('', methods=["GET"])
 def get_glassware():
-    ids = request.args.get('ids')
-    page = int(request.args.get('page'))
-    per_page = int(request.args.get('per_page'))
+    ids = request.args.get('ids') or None
+    page = request.args.get('page') or None
+    per_page = request.args.get('per_page') or None
 
     if ids is None and page is not None and per_page is not None:
         result = db.get_glassware_page(page, per_page)
