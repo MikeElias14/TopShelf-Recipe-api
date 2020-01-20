@@ -18,9 +18,7 @@ from models.model import (
 
 # Ingredients
 def get_ingredients(ids):
-    if not isinstance(ids, list):
-        list(ids)
-    query = Ingredients.query.filter(Ingredients.id.in_(ids)).all()
+    query = Ingredients.query.filter(Ingredients.id.in_(list(ids))).all()
 
     result = ingredients_to_json(query)
     return result
@@ -35,9 +33,7 @@ def get_ingredients_page(page, per_page):
 
 # Tags
 def get_tags(ids):
-    if not isinstance(ids, list):
-        list(ids)
-    query = Ingredients.query.filter(Ingredients.id.in_(ids)).all()
+    query = Ingredients.query.filter(Ingredients.id.in_(list(ids))).all()
 
     result = ingredients_to_json(query)
     return result
@@ -52,9 +48,7 @@ def get_tags_page(page, per_page):
 
 # Glassware
 def get_glassware(ids):
-    if not isinstance(ids, list):
-        list(ids)
-    query = Glassware.query.filter(Glassware.id.in_(ids)).all()
+    query = Glassware.query.filter(Glassware.id.in_(list(ids))).all()
 
     result = glassware_to_json(query)
     return result
@@ -69,9 +63,7 @@ def get_glassware_page(page, per_page):
 
 # Recipes
 def get_recipes(recipe_ids):
-    if not isinstance(recipe_ids, list):
-        list(recipe_ids)
-    query = Recipes.query.filter(Recipes.id.in_(recipe_ids)).all()
+    query = Recipes.query.filter(Recipes.id.in_(list(recipe_ids))).all()
 
     return query
 
