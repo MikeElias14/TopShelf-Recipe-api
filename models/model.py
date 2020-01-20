@@ -33,14 +33,15 @@ class Glassware(db.Model):
     __tablename__ = 'glassware'
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(128), nullable=False)
+    name = db.Column(db.String(128), nullable=False, unique=True)
     image = db.Column(db.String(128))
 
 
 class Ingredients(db.Model):
     __tablename__ = 'ingredients'
+
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(128), nullable=False)
+    name = db.Column(db.String(128), nullable=False, unique=True)
     image = db.Column(db.String(128))
 
 
@@ -56,7 +57,7 @@ class Tags(db.Model):
     __tablename__ = 'tags'
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    tag = db.Column(db.String(128), nullable=False)
+    name = db.Column(db.String(128), nullable=False, unique=True)
 
 
 class RecipesTags(db.Model):
@@ -64,6 +65,14 @@ class RecipesTags(db.Model):
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     recipes_id = db.Column(db.BigInteger, db.ForeignKey('recipes.id'), nullable=False)
+    tags_id = db.Column(db.BigInteger, db.ForeignKey('tags.id'), nullable=False)
+
+
+class IngredientsTags(db.Model):
+    __tablename__ = 'ingredient_tags'
+
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+    ingredients_id = db.Column(db.BigInteger, db.ForeignKey('ingredients.id'), nullable=False)
     tags_id = db.Column(db.BigInteger, db.ForeignKey('tags.id'), nullable=False)
 
 

@@ -1,8 +1,10 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 import config
+
+# Define db then connect later
+db = SQLAlchemy()
 
 
 def create_app(test_config=None):
@@ -10,7 +12,7 @@ def create_app(test_config=None):
     _app = Flask(__name__, instance_relative_config=True)
     _app.config.from_mapping(
         SECRET_KEY='dev',
-        SQLALCHEMY_DATABASE_URI=config.SQLALCHEMY_USER_DATABASE_URI
+        SQLALCHEMY_DATABASE_URI=config.SQLALCHEMY_RECIPE_DATABASE_URI
     )
 
     if test_config is None:
@@ -26,17 +28,28 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # DB init
-    _app.db = SQLAlchemy(_app)
-    _app.migrate = Migrate(_app, _app.db)
+    # Connect to DB
+    db.init_app(_app)
 
-    # Create User Routes
-    from api.v1.user_api import user_bp
-    _app.register_blueprint(user_bp)
+    # Create Routes
+    # Recipes
+    from api.v1.recipes_api import recipes_bp
+    _app.register_blueprint(recipes_bp)
+
+    # Ingredients
+    from api.v1.ingredients_api import ingredients_bp
+    _app.register_blueprint(ingredients_bp)
+
+    # Tags
+    from api.v1.tags_api import tags_bp
+    _app.register_blueprint(tags_bp)
+
+    # Glassware
+    from api.v1.glassware_api import glassware_bp
+    _app.register_blueprint(glassware_bp)
 
     return _app
 
 
-if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
+app = create_app()
+app.run(debug=True)
