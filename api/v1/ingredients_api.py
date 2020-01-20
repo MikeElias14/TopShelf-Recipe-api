@@ -23,15 +23,15 @@ ingredients_bp = Blueprint('ingredients', __name__, url_prefix='/ingredients')
 # Get One or More or All ingredients
 @ingredients_bp.route('', methods=["GET"])
 def get_ingredients():
-    ingredient_ids = request.args.get('ids')
+    ids = request.args.get('ids')
     page = int(request.args.get('page'))
     per_page = int(request.args.get('per_page'))
 
-    if ingredient_ids is None and page is not None and per_page is not None:
+    if ids is None and page is not None and per_page is not None:
         result = db.get_ingredients_page(page, per_page)
-        code = 200
-    elif ingredient_ids is not None:
-        result = db.get_ingredients(ingredient_ids)
+        code = 200  # TODO: Template these as var's in a config/defaults file
+    elif ids is not None:
+        result = db.get_ingredients(ids)
         code = 200
     else:
         result = 'error'

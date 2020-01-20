@@ -47,13 +47,13 @@ default_ingredients = [
 
 # Default ingredients
 default_tags = [
-    Tags(id=1, tag='Sweet'),
-    Tags(id=2, tag='Dry'),
-    Tags(id=3, tag='Warm'),
-    Tags(id=4, tag='Cold'),
-    Tags(id=5, tag='Smokey'),
-    Tags(id=6, tag='Bitter'),
-    Tags(id=7, tag='Sour')
+    Tags(id=1, name='Sweet'),
+    Tags(id=2, name='Dry'),
+    Tags(id=3, name='Warm'),
+    Tags(id=4, name='Cold'),
+    Tags(id=5, name='Smokey'),
+    Tags(id=6, name='Bitter'),
+    Tags(id=7, name='Sour')
 ]
 
 for glassware in default_glassware:
@@ -76,7 +76,7 @@ for tag in default_tags:
     new_tag = db.session.query(Tags).get(tag.id)
     if new_tag is None:
         db.session.add(tag)
-    elif new_tag.tag != tag.tag:
-        new_tag.tag = tag.tag
+    elif new_tag.name != tag.name:
+        new_tag.name = tag.name
 
 db.session.commit()

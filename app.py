@@ -32,11 +32,21 @@ def create_app(test_config=None):
     db.init_app(_app)
 
     # Create Routes
+    # Recipes
     from api.v1.recipes_api import recipes_bp
     _app.register_blueprint(recipes_bp)
 
+    # Ingredients
     from api.v1.ingredients_api import ingredients_bp
     _app.register_blueprint(ingredients_bp)
+
+    # Tags
+    from api.v1.tags_api import tags_bp
+    _app.register_blueprint(tags_bp)
+
+    # Glassware
+    from api.v1.glassware_api import glassware_bp
+    _app.register_blueprint(glassware_bp)
 
     return _app
 

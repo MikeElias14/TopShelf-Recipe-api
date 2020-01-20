@@ -1,4 +1,10 @@
 import json
+from controllers.convert_json import (
+    ingredients_to_json,
+    tags_to_json,
+    glassware_to_json,
+    recipes_to_json
+)
 from models.model import (
     RecipeIngredient,
     Recipes,
@@ -10,24 +16,11 @@ from models.model import (
 )
 
 
-# Template this?
-def ingredients_to_json(ingredients):
-    result = []
-
-    for ingredient in ingredients:
-        info = dict(
-            id=ingredient.id,
-            image=ingredient.image,
-            name=ingredient.name
-        )
-        result.append(info)
-    return result
-
-
-def get_ingredients(ingredient_ids):
-    if not isinstance(ingredient_ids, list):
-        list(ingredient_ids)
-    query = Ingredients.query.filter(Ingredients.id.in_(ingredient_ids)).all()
+# Ingredients
+def get_ingredients(ids):
+    if not isinstance(ids, list):
+        list(ids)
+    query = Ingredients.query.filter(Ingredients.id.in_(ids)).all()
 
     result = ingredients_to_json(query)
     return result
@@ -40,22 +33,41 @@ def get_ingredients_page(page, per_page):
     return result
 
 
-def get_tags(tag_ids):
-    if not isinstance(tag_ids, list):
-        list(tag_ids)
-    query = Tags.query.filter(Tags.id.in_(tag_ids)).all()
+# Tags
+def get_tags(ids):
+    if not isinstance(ids, list):
+        list(ids)
+    query = Ingredients.query.filter(Ingredients.id.in_(ids)).all()
 
-    return query
-
-
-def get_glassware(glassware_ids):
-    if not isinstance(glassware_ids, list):
-        list(glassware_ids)
-    query = Glassware.query.filter(Glassware.id.in_(glassware_ids)).all()
-
-    return query
+    result = ingredients_to_json(query)
+    return result
 
 
+def get_tags_page(page, per_page):
+    query = Tags.query.order_by(Tags.id).paginate(int(page), int(per_page), error_out=False)
+
+    result = tags_to_json(query.items)
+    return result
+
+
+# Glassware
+def get_glassware(ids):
+    if not isinstance(ids, list):
+        list(ids)
+    query = Glassware.query.filter(Glassware.id.in_(ids)).all()
+
+    result = glassware_to_json(query)
+    return result
+
+
+def get_glassware_page(page, per_page):
+    query = Glassware.query.order_by(Glassware.id).paginate(int(page), int(per_page), error_out=False)
+
+    result = glassware_to_json(query.items)
+    return result
+
+
+# Recipes
 def get_recipes(recipe_ids):
     if not isinstance(recipe_ids, list):
         list(recipe_ids)

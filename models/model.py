@@ -57,7 +57,7 @@ class Tags(db.Model):
     __tablename__ = 'tags'
 
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    tag = db.Column(db.String(128), nullable=False, unique=True)
+    name = db.Column(db.String(128), nullable=False, unique=True)
 
 
 class RecipesTags(db.Model):
